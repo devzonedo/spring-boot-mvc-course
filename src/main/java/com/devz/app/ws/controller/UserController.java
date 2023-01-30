@@ -7,6 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/users") // http://localhost:8080/users
 public class UserController {
@@ -40,7 +42,7 @@ public class UserController {
             MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE
     })
-    public ResponseEntity<UserRest> createUser(@RequestBody UserDetailRequestModel userDetail){
+    public ResponseEntity<UserRest> createUser(@Valid @RequestBody UserDetailRequestModel userDetail){
 
         UserRest returnValue = new UserRest();
         returnValue.setEmail(userDetail.getEmail());
