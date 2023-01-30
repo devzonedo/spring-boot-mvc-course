@@ -34,6 +34,9 @@ public class UserController {
     public ResponseEntity<UserRest> getUser(@PathVariable String userId){
 
 
+        String userName = null;
+        int lengthOfUsername = userName.length();
+
         if(users.containsKey(userId)){
             return new ResponseEntity<UserRest>(users.get(userId),HttpStatus.OK);
         }else{
@@ -85,9 +88,17 @@ public class UserController {
         return storedUserDetails;
     }
 
-    @DeleteMapping
-    public String deleteUser(){
-        return "delete user was called";
+    @DeleteMapping(path = "/{userId}",  consumes = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE
+    } ,
+            produces = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE
+            })
+    public ResponseEntity<Void> deleteUser(@PathVariable String userId){
+        users.remove(userId);
+        return ResponseEntity.noContent().build();
     }
 
 }
