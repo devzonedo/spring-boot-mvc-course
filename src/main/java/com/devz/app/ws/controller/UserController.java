@@ -8,10 +8,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users") // http://localhost:8080/users
 public class UserController {
+
+    Map<String, UserRest> users;
 
     @GetMapping
     public String getUsers(@RequestParam(value = "page" , defaultValue = "4") int page,
@@ -25,12 +30,13 @@ public class UserController {
             produces = {MediaType.APPLICATION_XML_VALUE,
             MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserRest> getUser(@PathVariable String userId){
-        UserRest userRest = new UserRest();
-        userRest.setEmail("test@mail.com");
-        userRest.setFirstName("testName F");
-        userRest.setLastName("testName L");
-        userRest.setEmail("testEmail");
-        return new ResponseEntity<UserRest>(HttpStatus.BAD_REQUEST);
+
+
+        if(users.containsKey(userId)){
+            return new ResponseEntity<UserRest>(users.get(userId),HttpStatus.OK);
+        }else{
+            return new ResponseEntity<UserRest>(HttpStatus.NO_CONTENT);
+        }
         //return "get user was called with user id = "+userId;
     }
 
@@ -48,7 +54,14 @@ public class UserController {
         returnValue.setEmail(userDetail.getEmail());
         returnValue.setFirstName(userDetail.getFirstName());
         returnValue.setLastName(userDetail.getLastName());
-        return new ResponseEntity<UserRest>(returnValue,HttpStatus.ACCEPTED);
+
+        if (users == null) users = new HashMap<>();
+        String userid = UUID.randomUUID().toString();
+        returnValue.setUserId(userid);
+
+        users.put(userid,returnValue);
+
+        return new ResponseEntity<UserRest>(returnValue,HttpStatus.OK);
     }
 
     @PutMapping
