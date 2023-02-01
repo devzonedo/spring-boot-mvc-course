@@ -4,6 +4,8 @@ import com.devz.app.ws.exception.UserServiceException;
 import com.devz.app.ws.model.request.UpdateUserDetailRequestModel;
 import com.devz.app.ws.model.request.UserDetailRequestModel;
 import com.devz.app.ws.model.response.UserRest;
+import com.devz.app.ws.userservice.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,9 @@ import java.util.UUID;
 public class UserController {
 
     Map<String, UserRest> users;
+
+    @Autowired
+    UserService userService;
 
     @GetMapping
     public String getUsers(@RequestParam(value = "page" , defaultValue = "4") int page,
@@ -57,16 +62,7 @@ if(true)throw new UserServiceException("User service exception is thrown");
     })
     public ResponseEntity<UserRest> createUser(@Valid @RequestBody UserDetailRequestModel userDetail){
 
-        UserRest returnValue = new UserRest();
-        returnValue.setEmail(userDetail.getEmail());
-        returnValue.setFirstName(userDetail.getFirstName());
-        returnValue.setLastName(userDetail.getLastName());
-
-        if (users == null) users = new HashMap<>();
-        String userid = UUID.randomUUID().toString();
-        returnValue.setUserId(userid);
-
-        users.put(userid,returnValue);
+        UserRest returnValue=  userService.createUser(userDetail);
 
         return new ResponseEntity<UserRest>(returnValue,HttpStatus.OK);
     }
