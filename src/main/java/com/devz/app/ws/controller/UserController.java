@@ -1,5 +1,6 @@
 package com.devz.app.ws.controller;
 
+import com.devz.app.ws.exception.UserServiceException;
 import com.devz.app.ws.model.request.UpdateUserDetailRequestModel;
 import com.devz.app.ws.model.request.UserDetailRequestModel;
 import com.devz.app.ws.model.response.UserRest;
@@ -33,6 +34,7 @@ public class UserController {
             MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserRest> getUser(@PathVariable String userId){
 
+if(true)throw new UserServiceException("User service exception is thrown");
 
         String userName = null;
         int lengthOfUsername = userName.length();
