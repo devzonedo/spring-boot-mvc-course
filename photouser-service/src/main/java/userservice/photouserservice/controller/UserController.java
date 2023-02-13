@@ -1,9 +1,14 @@
 package userservice.photouserservice.controller;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
+import userservice.photouserservice.data.UserEntity;
 import userservice.photouserservice.model.CreateUserRequestModel;
+import userservice.photouserservice.service.UserService;
+import userservice.photouserservice.shared.UserDto;
 
 import javax.validation.Valid;
 
@@ -13,6 +18,9 @@ public class UserController {
     @Autowired
     private Environment env;
 
+    @Autowired
+    UserService userService;
+
     @GetMapping("/status/check")
     public String status(){
         return  "working on port "+env.getProperty("local.server.port");
@@ -20,6 +28,11 @@ public class UserController {
 
     @PostMapping
     public String createUser(@Valid @RequestBody CreateUserRequestModel userDetails){
+
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        UserDto userDto  = modelMapper.map(userDetails,UserDto.class);
+        userService.createUser(userDto);
         return "create user method calling";
     }
 }
