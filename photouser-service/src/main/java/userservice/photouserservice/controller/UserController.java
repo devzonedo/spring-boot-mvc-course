@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import userservice.photouserservice.data.UserEntity;
 import userservice.photouserservice.model.CreateUserRequestModel;
+import userservice.photouserservice.model.CreateUserResponseModel;
 import userservice.photouserservice.service.UserService;
 import userservice.photouserservice.shared.UserDto;
 
@@ -29,12 +30,15 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity createUser(@Valid @RequestBody CreateUserRequestModel userDetails){
+    public ResponseEntity<CreateUserResponseModel> createUser(@Valid @RequestBody CreateUserRequestModel userDetails){
 
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         UserDto userDto  = modelMapper.map(userDetails,UserDto.class);
-        userService.createUser(userDto);
-        return new ResponseEntity(HttpStatus.CREATED);
+
+        UserDto createdUser = userService.createUser(userDto);
+        CreateUserResponseModel createUserResponseModel = modelMapper.map(createdUser,CreateUserResponseModel.class);
+
+        return  ResponseEntity.status(HttpStatus.CREATED).body(createUserResponseModel);
     }
 }
