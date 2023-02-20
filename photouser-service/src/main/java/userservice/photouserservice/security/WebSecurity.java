@@ -29,9 +29,16 @@ public class WebSecurity {
                 .requestMatchers(new AntPathRequestMatcher("/users")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
                 .and()
+//                .addFilter(getAuthenticationFilter())
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.headers().frameOptions().disable();
         return http.build();
+    }
+
+    private AuthenticationFilter getAuthenticationFilter(){
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter();
+//        authenticationFilter.setAuthenticationManager(authenticationManager());
+        return authenticationFilter;
     }
 }
