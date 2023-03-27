@@ -1,5 +1,6 @@
 package userservice.photouserservice.service;
 
+import org.apache.catalina.User;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MatchingStrategy;
@@ -29,8 +30,9 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = modelMapper.map(userDetails,UserEntity.class);
 
         userEntity.setEncryptedPassword("testpassword");
-        usersRepository.save(userEntity);
+        UserEntity save = usersRepository.save(userEntity);
 
-        return null;
+        UserDto returnValue = modelMapper.map(save, UserDto.class);
+        return returnValue;
     }
 }

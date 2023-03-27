@@ -11,7 +11,7 @@
 	<groupId>user-service</groupId>
 	<artifactId>photouser-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>photouser-service</name>
 	<description>Photo App Eureka Discovery Server</description>
 	<properties>
